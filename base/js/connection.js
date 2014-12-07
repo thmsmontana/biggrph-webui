@@ -11,5 +11,5 @@ socket.on('contract', function (contract) {
 })
 
 socket.on('newdata', function (timestamp, data) {
-	updateValues(data);
+	updateValues(timestamp, data);
 });

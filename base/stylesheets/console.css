@@ -11,6 +11,8 @@
 	transition: height .3s;
 
 	box-sizing: content-box;
+
+	background-color: rgba(255, 255, 255, 0.9);
 }
 
 .console.collapsed {
@@ -119,7 +121,7 @@
 .console-messages > div {
 	position: relative;
 	background-color: #ffffff;
-	opacity: .9;
+	opacity: .8;
 	color: #505050;
 	padding: 5px 10px;
 	transition: box-shadow .2s linear, z-index .2s linear;

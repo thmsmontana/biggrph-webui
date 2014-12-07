@@ -34,11 +34,11 @@
 
 <body>
 
-    <div class="container">
-        <div id="data-table">
-            
-        </div>
-    </div>
+	<div class="container" id="content">
+		<div id="data-table">
+		</div>
+		<div id="charts"></div>
+	</div>
 
 	<div class="console collapsed" id="console">
 		<div class="console-header">
@@ -62,13 +62,18 @@
 
 		</div>
 		<div class="console-messages" id="console-messages">
-
+			<div class="console-message message-info">
+				<div class="console-message-meta">
+					<a class="timestamp" href="#">25/12/2014 15:30:03</a>
+					<span class="tag tag-info">info</span>				
+				</div>				
+				<p class="console-message-string">The console does not show log messages yet. You can fake events by clicking the three links at the left of that grey bar above.</p>			
+			</div>
 		</div>
 	</div>
-<script type="text/javascript" src="js/console.js"></script>
-<script type="text/javascript" src="js/controller.js"></script>
-<script type="text/javascript" src="js/connection.js"></script>
-
+	<script type="text/javascript" src="js/console.js"></script>
+	<script type="text/javascript" src="js/controller.js"></script>
+	<script type="text/javascript" src="js/connection.js"></script>
 
 </body>
 </html>

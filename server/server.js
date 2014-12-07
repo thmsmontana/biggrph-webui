@@ -51,9 +51,9 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('contractAccepted', function () {
 		dataIntervalId = setInterval(function () {
-			timestamp = new Date();
+			timestamp = (new Date()).getTime();
 			socket.emit('newdata', timestamp, generateRandomData());
-		}, 2000);
+		}, 500);
 	})
 
 	socket.on('disconnect', function () {
