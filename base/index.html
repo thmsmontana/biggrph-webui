@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+	<meta charset="utf-8">
+	<title>Your Page Title Here :)</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+	<link rel="stylesheet" href="stylesheets/console.css">
+	<link rel="stylesheet" href="stylesheets/styles.css">
+	<link rel="stylesheet" href="stylesheets/font-awesome.min.css">
+
+<!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="shortcut icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="js/highcharts.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="data-table">
+            
+        </div>
+    </div>
+
+	<div class="console collapsed" id="console">
+		<div class="console-header">
+			<div class="buttons left-buttons">
+				<a id="add-info" href="#">Info</a>
+				<a id="add-warning" href="#">Warning</a>
+				<a id="add-error" href="#">Error</a>
+			</div>		
+
+			<div class="buttons right-buttons">
+				<a id="toggle-console" href="#"><i class="fa fa-caret-square-o-down"></i></a>
+			</div>
+
+			<div class="console-stats">
+				<span href="#">Runtime 00:10:23</span>
+				<span><a id="console-showall" href="#">42 entries</a></span>
+				<span><a id="console-level-error" href="#">12 errors</a></span>
+				<span><a id="console-level-warning" href="#">3 warnings</a></span>
+				<span><a id="console-level-info" href="#">23 infos</a></span>
+			</div>
+
+		</div>
+		<div class="console-messages" id="console-messages">
+
+		</div>
+	</div>
+<script type="text/javascript" src="js/console.js"></script>
+<script type="text/javascript" src="js/controller.js"></script>
+<script type="text/javascript" src="js/connection.js"></script>
+
+
+</body>
+</html>

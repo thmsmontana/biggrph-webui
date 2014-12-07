@@ -1,0 +1,145 @@
+/* Déclaration */
+@purple-medium: #D993ED;
+@blue-medium:   #60BAF9;
+@green-medium:  #82E14F;
+@orange-medium: #FDAC30;
+@pink-medium:   #F84780;
+@white:         #FFFFFF;
+@grey-light:    #F9F9F9;
+@grey-medium:   #E4E4E4;
+@grey-dark:     #5F626B;
+
+#data-table {
+	margin: 10px 0px 0px 0px;
+	padding: 0px;
+	width: 100%;
+}
+#data-table table {
+    border-collapse: separate;
+    border-spacing: 0px;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+#data-table tr:nth-child(odd) { background-color: @grey-light; }
+#data-table tr:nth-child(even) { background-color: @white; }
+#data-table td {
+	vertical-align: middle;
+	border-width: 0px 1px 0px 0px;
+	text-align: left;
+	padding: 7px;
+	font-size: 11px;
+	font-family: Arial;
+	font-weight: normal;
+	color: @grey-dark;
+	transition: background-color .1s linear;
+}
+#data-table td:hover {
+	cursor: pointer;
+	background-color:@grey-medium;
+	color: @white;
+}
+#data-table td:first-child {
+	background-color: @white !important;
+}
+/*#data-table tr:first-child td:hover, #data-table td:first-child:hover {
+	cursor: default;
+}*/
+#data-table td:first-child:hover {
+	cursor: default;
+}
+#data-table tr:last-child td {
+	border-width: 0px 1px 0px 0px;
+}
+#data-table tr:last-child td:last-child {
+	border-width: 0px 0px 0px 0px;
+}
+#data-table tr:first-child td:first-child {
+	border-width: 0px 0px 1px 0px;
+}
+#data-table tr:first-child td:last-child {
+	border-width: 0px 0px 1px 1px;
+}
+#data-table tr:first-child td {	
+	background-color: @white;
+	border-width: 0px 0px 1px 1px;
+	font-size: 14px;
+	font-family: Arial;
+	font-weight: bold;
+	color: @grey-dark;
+	border-top: 2px solid @grey-medium !important;
+	border-bottom: 2px solid @grey-medium !important;
+}
+#data-table tr:first-child td:first-child {
+	border-top: 2px solid transparent !important;
+	border-bottom: 2px solid transparent !important;
+}
+.circle:before {
+	content: "";
+    line-height: 1em;
+    width: .6em;
+    height: .6em;
+    float: left;
+    border-radius: 50%;
+}
+#circle-purple:before { background-color: @purple-medium; }
+#circle-blue:before { background-color: @blue-medium; }
+#circle-green:before { background-color: @green-medium; }
+#circle-orange:before { background-color: @orange-medium; }
+#circle-pink:before { background-color: @pink-medium; }
+
+tr td.checked {
+	color: @white!important; 
+	font-weight: bold!important;
+}
+
+tr.purple td.checked {
+	background-color: @purple-medium!important;
+}
+tr.blue td.checked {
+  	background-color: @blue-medium!important;
+}
+tr.green td.checked {
+  	background-color: @green-medium!important;
+}
+tr.orange td.checked {
+  	background-color: @orange-medium!important;
+}
+tr.pink td.checked {
+  	background-color: @pink-medium!important;
+}
+
+td.cell-grey {
+  	background-color: @grey-medium !important; 
+}
+
+
+/*
+ * lalilalilou
+ */
+td:nth-child(2) {
+  display: none;
+}
+
+/* COULEURS : Clair Moyen Foncé
+Violet
+#D993ED
+#C96FE2
+#AF48CC
+Bleu
+#60BAF9
+#40ACF9
+#1397F4
+Vert
+#82E14F
+#6EDC32
+#4BC50A
+Jaune
+Orange
+#FDAC30
+#F89600
+Rose
+#F84780
+#F72469
+*/

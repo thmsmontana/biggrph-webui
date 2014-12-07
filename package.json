@@ -1,0 +1,28 @@
+{
+  "name": "biggrph-webui",
+
+  "description": "A monitoring UI for Big Grph",
+  
+  "contributors": [
+    {"name": "Nancy Fong",  "email": "fong@polytech.unice.fr"},
+    {"name": "Thomas Montana", "email": "montana@polytech.unice.fr"}
+  ],
+ 
+  "scripts": {
+    "start": "node server/server.js"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thmsmontana/biggrph-webui"
+  },
+
+  "bugs": {"url": "https://github.com/thmsmontana/biggrph-webui/issues"},
+
+  "dependencies": {
+    "express": "*",
+    "fs": "*",
+    "socket.io": "*",
+    "sqlite3": "*"
+  }
+}
