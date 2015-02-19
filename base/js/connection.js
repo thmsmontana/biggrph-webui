@@ -7,7 +7,6 @@ socket.on('connect', function() {});
 
 socket.on('contract', function (contract) {
 	generateDataTable(contract);
-	socket.emit('contractAccepted');
 })
 
 socket.on('newdata', function (timestamp, data) {

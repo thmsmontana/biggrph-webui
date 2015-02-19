@@ -1,9 +1,9 @@
 var JSON_TO_PRETTY_NAMES = {
 	'id'       : '#',
 	'dns'      : 'DNS',
-	'loadAvg'  : 'Load Average',
+	'absLoadAvg'  : 'Abs Load Average',
+	'relLoadAvg'  : 'Rel Load Average',
 	'ram'      : 'RAM',
-	'cpu'      : 'CPU',
 	'ramSpeed' : 'RAM Speed'
 };
 
@@ -258,6 +258,7 @@ function highlightCell(columnName, machineID, hover) {
 
 
 function updateValues (timestamp, jsonValues) {
+	console.log(jsonValues);
 	$.each(jsonValues, function(machineID, columns) {
 		$.each(columns, function(columnName, value) {
 			if (columnName == 'id') return true;

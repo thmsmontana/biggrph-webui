@@ -13,9 +13,9 @@ db.serialize(function() {
 		db.run('CREATE TABLE Stats ('
 			+ 'timestamp  INTEGER,'
 			+ 'machine_id INTEGER,'
-			+ 'load_avg   INTEGER,'
+			+ 'abs_load_avg   INTEGER,'
+			+ 'rel_load_avg   INTEGER,'
 			+ 'ram        INTEGER,'
-			+ 'cpu        INTEGER,'
 			+ 'ram_speed  INTEGER)');
 
 		db.run('CREATE TABLE LogEntries ('
@@ -47,14 +47,14 @@ app.get('/', function (req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
-	socket.emit('contract', generateContract());
+	socket.on('nMachines', function (n) {
+		socket.broadcast.emit('contract', generateContract(n));
+	});
 
-	socket.on('contractAccepted', function () {
-		dataIntervalId = setInterval(function () {
-			timestamp = (new Date()).getTime();
-			socket.emit('newdata', timestamp, generateRandomData());
-		}, 500);
-	})
+	socket.on('statusReport', function(timestamp, data) {
+		console.log(timestamp);
+		socket.broadcast.emit('newdata', timestamp, data);
+	});	
 
 	socket.on('disconnect', function () {
 		clearInterval(dataIntervalId);
@@ -64,37 +64,15 @@ io.sockets.on('connection', function (socket) {
 
 
 
+function generateContract(n) {
+	var nMachinesArray = [];
 
-
-
-
-
-
-function generateContract() {
-	return {
-		machines : [0, 1, 2, 3, 4],
-		columns  : ['id', 'dns', 'loadAvg', 'ram', 'cpu', 'ramSpeed']
-	};
-}
-
-function generateRandomData() {
-	var query = db.prepare("INSERT INTO Stats VALUES (?, ?, ?, ?, ?, ?)");
-	var jsonArray = [];
-	for (var i = 0; i < 5; ++i) {
-		var dns 	  = 'machine' + i + '.inria.net',
-			load_avg  = 2 * i + Math.floor(Math.random() * 10),
-			ram 	  = i + Math.floor(Math.random() * 10),
-			cpu 	  = i + Math.floor(Math.random() * 10),
-			ram_speed = 4 + i + Math.floor(Math.random() * 10);
-
-		query.run(dns, load_avg, ram, cpu, ram_speed);
-
-		jsonArray.push({id:       i,
-						dns:      dns,
-						loadAvg:  load_avg,
-						ram:      ram,
-						cpu:      cpu,
-						ramSpeed: ram_speed})
+	for (var i = 0; i < n; i++){
+		nMachinesArray.push(i);
 	}
-	return jsonArray;
+
+	return {
+		machines : nMachinesArray,
+		columns  : ['id', 'dns', 'absLoadAvg', 'relLoadAvg', 'ram', 'ramSpeed']
+	};
 }
