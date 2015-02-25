@@ -115,6 +115,11 @@ function generateDataTable (contract) {
 				});
 
 				seriesMapping[columnName][machineID] = charts[columnName].addSeries({name:machineID, color: HEX_COLORS[i], data:[]});
+							charts[columnName].addSeries({
+				type: 'flags',
+				id: 'events',
+				data: []
+			}, true, false);
 				seriesMapping[columnName][machineID].hide();
 			}
 
@@ -300,16 +305,8 @@ function generateChart(columnName) {
 				fillOpacity: .45
 			}
 		},
-		/*xAxis: {
-			type: 'datetime',
-			tickPixelInterval: 150
-		},*/
 		title: { text: JSON_TO_PRETTY_NAMES[columnName] },
-		series: [{
-			id: 'events',
-			type: 'flags',
-			data: []
-		}],
+		series: [],
 		rangeSelector: {
 			enabled: false
 		}
