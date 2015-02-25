@@ -7,8 +7,12 @@ socket.on('connect', function() {});
 
 socket.on('contract', function (contract) {
 	generateDataTable(contract);
-})
+});
 
 socket.on('newdata', function (timestamp, data) {
 	updateValues(timestamp, data);
+});
+
+socket.on('log', function(timestamp, type, message) {
+	addMessage(type, message);
 });
