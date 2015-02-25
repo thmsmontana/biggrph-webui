@@ -297,7 +297,10 @@ function generateChart(columnName) {
 			enabled: false
 		},
 		tooltip: {
-			enabled: false
+			style: {
+                    width: '200px'
+                },
+                valueDecimals: 4
 		},
 		plotOptions: {
 			areaspline: {

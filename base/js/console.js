@@ -90,6 +90,7 @@ function addMessage(timestamp, messageType, messageString) {
 	$.each(charts, function(key, chart){
 		chart.get('events').addPoint({
 			title: " ",
+			text: messageString,
 			x: timestamp,
             shape : 'url(../images/' + MESSAGE_TYPE[messageType] + '.png)'  
 		}, true, false);
