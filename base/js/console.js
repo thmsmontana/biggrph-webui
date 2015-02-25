@@ -1,3 +1,11 @@
+var MESSAGE_TYPE = {
+	0: 'info',
+	1: 'warning',
+	2: 'error'
+};
+
+
+
 /*
  *	TOGGLE CONSOLE
  */
@@ -65,18 +73,7 @@ function hideConsole() {
 }
 
 function buildMessage(timestamp, messageType, messageString) {
-	var typeString;
-	switch (messageType) {
-		case 0:
-			typeString = "info";
-			break;
-		case 1:
-			typeString = "warning";
-			break;
-		case 2:
-			typeString = "error";
-			break;
-	}
+	var typeString = MESSAGE_TYPE[messageType];
 	var date = new Date(timestamp);
 	var message = '<div class="console-message message-'+ typeString+  '">				<div class="console-message-meta">					<a class="timestamp" href="#">' + date.toLocaleString() + '</a>					<span class="tag tag-' + typeString + '">' + typeString + '</span>				</div>				<p class="console-message-string">' + messageString + '</p>			</div>'
 	return message;
@@ -92,20 +89,11 @@ function addMessage(timestamp, messageType, messageString) {
 
 	$.each(charts, function(key, chart){
 		chart.get('events').addPoint({
-			title: 'amourrrr',
-			x: timestamp
+			title: " ",
+			x: timestamp,
+            shape : 'url(../images/' + MESSAGE_TYPE[messageType] + '.png)'  
 		}, true, false);
 	});
 }
-
-
-
-
-
-
-
-
-
-
 
 

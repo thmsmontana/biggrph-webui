@@ -175,12 +175,15 @@ a.timestamp:hover {
 
 .tag-info {
 	background-color: hsla(206.1, 90%, 68%, 1.0);
+	/* Hex : #64B7F7 */
 }
 .tag-warning {
 	background-color: hsla(28.2, 90%, 68%, 1.0);
+	/* Hex : #F7A964 */
 }
 .tag-error {
 	background-color: hsla(357.4, 90%, 68%, 1.0);
+	/* Hex : #F7646A */
 }
 
 .console-messages.log-warning .message-info {

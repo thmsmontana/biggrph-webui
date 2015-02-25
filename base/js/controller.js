@@ -21,7 +21,7 @@ var HEX_COLORS = {
 	3: '#82E14F',
 	4: '#FDAC30',
 	5: '#F84780'
-}
+};
 
 
 var checkedCells = {};
@@ -118,7 +118,9 @@ function generateDataTable (contract) {
 							charts[columnName].addSeries({
 				type: 'flags',
 				id: 'events',
-				data: []
+				data: [],
+				width: 16,
+            	height: 16
 			}, true, false);
 				seriesMapping[columnName][machineID].hide();
 			}
