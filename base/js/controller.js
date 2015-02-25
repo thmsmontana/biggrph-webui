@@ -114,7 +114,7 @@ function generateDataTable (contract) {
 					toggleCell(machineID, columnName);
 				});
 
-				seriesMapping[columnName][machineID] = charts[columnName].addSeries({color: HEX_COLORS[i], data:[null, null, null, null, null, null, null, null, null, null]});
+				seriesMapping[columnName][machineID] = charts[columnName].addSeries({name:machineID, color: HEX_COLORS[i], data:[]});
 				seriesMapping[columnName][machineID].hide();
 			}
 
@@ -258,13 +258,12 @@ function highlightCell(columnName, machineID, hover) {
 
 
 function updateValues (timestamp, jsonValues) {
-	console.log(jsonValues);
 	$.each(jsonValues, function(machineID, columns) {
 		$.each(columns, function(columnName, value) {
 			if (columnName == 'id') return true;
 			cellMapping[columnName][machineID].text(value);
 			if (columnName != 'dns') {
-				seriesMapping[columnName][machineID].addPoint([timestamp, value], true, true);
+				seriesMapping[columnName][machineID].addPoint([timestamp, value], true, false);
 			}
 		});
 	});
@@ -278,7 +277,7 @@ function generateChart(columnName) {
 	var div = $('<div id="' + id + '"></div>');
 	div.hide();
 	$('#charts').append(div);
-	return new Highcharts.Chart({
+	return new Highcharts.StockChart({
 		chart: {
 			type: 'areaspline',
 			renderTo: id
@@ -301,11 +300,18 @@ function generateChart(columnName) {
 				fillOpacity: .45
 			}
 		},
-		xAxis: {
+		/*xAxis: {
 			type: 'datetime',
 			tickPixelInterval: 150
-		},
+		},*/
 		title: { text: JSON_TO_PRETTY_NAMES[columnName] },
-		series: []
+		series: [{
+			id: 'events',
+			type: 'flags',
+			data: []
+		}],
+		rangeSelector: {
+			enabled: false
+		}
 	});
 }

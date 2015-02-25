@@ -89,6 +89,13 @@ function addMessage(timestamp, messageType, messageString) {
 	if (scroll) {
 		$("#console-messages").animate({scrollTop:$("#console-messages")[0].scrollHeight}, 300);
 	}
+
+	$.each(charts, function(key, chart){
+		chart.get('events').addPoint({
+			title: 'amourrrr',
+			x: timestamp
+		}, true, false);
+	});
 }
 
 

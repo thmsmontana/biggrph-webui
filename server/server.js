@@ -52,9 +52,8 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('statusReport', function(timestamp, data) {
-		console.log(timestamp);
 		socket.broadcast.emit('newdata', timestamp, data);
-		//saveStatsToDatabase(data);
+		saveStatsToDatabase(timestamp, data);
 	});	
 
 	socket.on('disconnect', function () {
@@ -82,16 +81,15 @@ function generateContract(n) {
 	};
 }
 
-/*
-function saveStatsToDatabase(data) {
+
+function saveStatsToDatabase(timestamp, data) {
 	var query = db.prepare("INSERT INTO Stats VALUES (?, ?, ?, ?, ?, ?)");
 	
-	var dns 	  = 'machine' + i + '.inria.net',
-		abs_load_avg  = 2 * i + Math.floor(Math.random() * 10),
-		rel_load_avg  = 2 * i + Math.floor(Math.random() * 10),
-		ram 	  = i + Math.floor(Math.random() * 10),
-		ram_speed = 4 + i + Math.floor(Math.random() * 10);
+	var dns 	      = data[0].dns,
+		abs_load_avg  = data[0].absLoadAvg,
+		rel_load_avg  = data[0].relLoadAvg,
+		ram 	      = data[0].ram,
+		ram_speed     = data[0].ramSpeed;
 
-	query.run(dns, abs_load_avg, rel_load_avg, ram, ram_speed);
-
-}*/
+	query.run(timestamp, dns, abs_load_avg, rel_load_avg, ram, ram_speed);
+}
