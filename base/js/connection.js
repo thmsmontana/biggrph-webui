@@ -14,5 +14,5 @@ socket.on('newdata', function (timestamp, data) {
 });
 
 socket.on('log', function(timestamp, type, message) {
-	addMessage(type, message);
+	addMessage(timestamp, type, message);
 });
