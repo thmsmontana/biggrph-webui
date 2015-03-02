@@ -13,16 +13,18 @@ socket.on('message', function (content) {
 				nMachinesArray.push(i);
 			}
 
-			var contract = {
+			contract = {
 				machines : nMachinesArray,
 				columns  : ['id', 'dns', 'absLoadAvg', 'relLoadAvg', 'ram', 'ramSpeed']
 			};
-
-			generateDataTable(contract);
+			updateView();
+			generateDataTable();
 			break;
 
 		case 'newdata':
-			updateValues(content.data.timestamp, content.data.values);
+			if (contract) {
+				updateValues(content.data.timestamp, content.data.values);
+			}
 			break;
 
 		case 'log':

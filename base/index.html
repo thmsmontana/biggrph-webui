@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="stylesheets/layout.css">
 	<link rel="stylesheet" href="stylesheets/console.css">
 	<link rel="stylesheet" href="stylesheets/styles.css">
+	<link rel="stylesheet" href="stylesheets/object.css">
 	<link rel="stylesheet" href="stylesheets/font-awesome.min.css">
 
 <!--[if lt IE 9]>
@@ -36,45 +37,50 @@
 
 	<div id="menu">
 		<div id="cluster">
-			Cluster
+			<h3 onclick="selectObject(null)">Cluster</h3>
 			<div id="list-nodes"></div>
 		</div>
 		<div id="objects">
-			Objects
+			<h3>Objects</h3>
 			<div id="list-objects"></div>
 		</div>
 	</div>
 
+	<div id="objectView"></div>
 	<div id="main">
-		<div class="container" id="content">
-			<div id="data-table">
+		<div id="clusterView">
+			<div class="container" id="content">
+				<div id="data-table"></div>
+				<div id="charts"></div>
 			</div>
-			<div id="charts"></div>
-		</div>
 
-		<div class="console collapsed" id="console">
-			<div class="console-header">
-				<div class="buttons right-buttons">
-					<a id="toggle-console" href="#"><i class="fa fa-caret-square-o-down"></i></a>
+			<div class="console collapsed" id="console">
+				<div class="console-header">
+					<div class="buttons right-buttons">
+						<a id="toggle-console" href="#"><i class="fa fa-caret-square-o-down"></i></a>
+					</div>
+
+					<div class="console-stats">
+						<span href="#">Runtime 00:10:23</span>
+						<span><a id="console-showall" href="#">42 entries</a></span>
+						<span><a id="console-level-error" href="#">12 errors</a></span>
+						<span><a id="console-level-warning" href="#">3 warnings</a></span>
+						<span><a id="console-level-info" href="#">23 infos</a></span>
+					</div>
+
 				</div>
+				<div class="console-messages" id="console-messages">
 
-				<div class="console-stats">
-					<span href="#">Runtime 00:10:23</span>
-					<span><a id="console-showall" href="#">42 entries</a></span>
-					<span><a id="console-level-error" href="#">12 errors</a></span>
-					<span><a id="console-level-warning" href="#">3 warnings</a></span>
-					<span><a id="console-level-info" href="#">23 infos</a></span>
 				</div>
-
-			</div>
-			<div class="console-messages" id="console-messages">
-
 			</div>
 		</div>
 	</div>
 
-	<script type="text/javascript" src="js/controller.js"></script>
+	<script type="text/javascript" src="js/cluster.js"></script>
 	<script type="text/javascript" src="js/console.js"></script>
+	<script type="text/javascript" src="js/bigobject.js"></script>
+	<script type="text/javascript" src="js/sidebar.js"></script>
+	<script type="text/javascript" src="js/controller.js"></script>
 	<script type="text/javascript" src="js/connection.js"></script>
 
 </body>
