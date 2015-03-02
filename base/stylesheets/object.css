@@ -1,0 +1,82 @@
+.bigobject {
+	padding-top: 20px;
+}
+
+.bigobject h1 {
+	margin: 20px 0 30px;
+}
+
+.tag-type {
+	text-transform: uppercase;
+	font-size: 0.3em;
+	padding: 5px;
+	background: rgb(240, 240, 240);
+	border: 1px solid rgb(230, 230, 230);
+	border-radius: 3px;
+	color: rgb(120, 120, 120);
+	margin: 10px;
+}
+
+.panel {
+	background: rgb(250,250,250);
+	border-radius: 10px;
+	border: 1px solid rgb(230,230,230);
+	padding: 0;
+	margin: 20px 0 20px 0;
+	box-sizing: border-box;
+}
+
+.panel h2 {
+	margin: 0;
+	padding: 15px;
+	width: 100%;
+	font-weight: bolder;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	box-sizing: border-box;
+	color: rgb(130, 130, 130);
+	text-shadow: 0 1px 2px white;
+	background: rgb(240, 240, 240);
+	border-radius: 10px 10px 0 0;
+	font-size: 1.2em;
+	line-height: 1em;
+	border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+.panel ul {
+	padding: 0;
+	margin: 0;
+	border-radius: 0 0 15px 15px;
+}
+
+.panel ul li {
+	padding: 12px 15px;
+	margin: 0;
+	border-bottom: 1px solid rgb(230, 230, 230);
+	cursor: pointer;
+}
+
+.panel ul li i {
+	visibility: hidden;
+	color: inherit!important;
+	float: right;
+}
+
+.panel ul li:hover {
+	background:  rgba(255, 255, 255, 0.6);
+}
+
+.panel ul li:hover i {
+	visibility: visible;
+}
+
+.panel ul li:last-child {
+	border: none;
+	border-radius: 0 0 15px 15px;
+}
+
+
+
+div.circle::before {
+	margin: 5px 10px 0 0;
+}
