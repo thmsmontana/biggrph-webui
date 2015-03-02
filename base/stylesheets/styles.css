@@ -120,6 +120,7 @@ td {
 }
 td:nth-child(1) {
   width: 5%;
+  padding-left: 3% !important;
 }
 td:nth-child(2) {
   display: none;
@@ -160,8 +161,51 @@ div#content {
 }
 #list-objects,
 #list-nodes {
-  font-size: 11px;
-  font-weight: normal;
+  font-size: 11px !important;
+  font-weight: normal !important;
+}
+#list-objects li {
+  cursor: pointer;
+  list-style-type: none;
+  margin: 0;
+  padding: 10px 5px 0 5px;
+  position: relative;
+}
+#list-objects li::before,
+#list-objects li::after {
+  content: '';
+  left: -20px;
+  position: absolute;
+  right: auto;
+}
+#list-objects li::before {
+  border-left: 1px solid #999;
+  bottom: 50px;
+  height: 33px;
+  top: 0;
+  width: 1px;
+}
+#list-objects li::after {
+  border-top: 1px solid #999;
+  height: 20px;
+  top: 21px;
+  width: 21px;
+}
+#list-objects li span {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  display: inline-block;
+  padding: 3px 8px;
+  text-decoration: none;
+}
+#list-objects > ul > li::before,
+#list-objects > ul > li::after {
+  border: 0;
+}
+#list-objects li:last-child::before {
+  height: 22px;
 }
 /* COULEURS : Clair Moyen Foncé
 Violet
