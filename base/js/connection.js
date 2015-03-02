@@ -1,21 +1,40 @@
 var	socket = io.connect();
-var hasContract = false;
+var bigObjects;
 
 // on connection to server, ask for user's name with an anonymous callback
 socket.on('connect', function() {});
 
+socket.on('message', function (content) {
+	switch (content.msg) {
+		case 'nMachines':
+			var nMachinesArray = [];
 
-socket.on('contract', function (contract) {
-	hasContract = true;
-	generateDataTable(contract);
-});
+			for (var i = 0; i < content.data; i++){
+				nMachinesArray.push(i);
+			}
 
-socket.on('newdata', function (timestamp, data) {
-	if (hasContract) {
-		updateValues(timestamp, data);
-	}	
-});
+			var contract = {
+				machines : nMachinesArray,
+				columns  : ['id', 'dns', 'absLoadAvg', 'relLoadAvg', 'ram', 'ramSpeed']
+			};
 
-socket.on('log', function(timestamp, type, message) {
-	addMessage(timestamp, type, message);
+			generateDataTable(contract);
+			break;
+
+		case 'newdata':
+			updateValues(content.data.timestamp, content.data.values);
+			break;
+
+		case 'log':
+			addMessage(content.data.timestamp, content.data.level, content.data.message);
+			break;
+
+		case 'bigobjects':
+			bigObjects = content.data;
+			displayBigObjects();
+			break;
+
+		default:
+			break;
+	}
 });

@@ -37,6 +37,8 @@ var chart;
 var _contract;
 
 function generateDataTable (contract) {
+	$('#data-table').empty();
+
 	_contract = contract;
 
 	var table = $('<table id="table"></table>');
@@ -263,7 +265,6 @@ function highlightCell(columnName, machineID, hover) {
 }
 
 
-
 function updateValues (timestamp, jsonValues) {
 	$.each(jsonValues, function(machineID, columns) {
 		$.each(columns, function(columnName, value) {
@@ -274,7 +275,6 @@ function updateValues (timestamp, jsonValues) {
 			}
 		});
 	});
-
 }
 
 
@@ -315,5 +315,14 @@ function generateChart(columnName) {
 		rangeSelector: {
 			enabled: false
 		}
+	});
+}
+
+
+function displayBigObjects() {
+	$('#list-objects').empty();
+
+	$.each(bigObjects, function(key, object) {
+		$('#list-objects').append("<li>" + object.id + "</li>");
 	});
 }
