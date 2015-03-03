@@ -7,22 +7,7 @@ var JSON_TO_PRETTY_NAMES = {
 	'ramSpeed' : 'RAM Speed'
 };
 
-var LABEL_COLORS = {
-	1: 'purple',
-	2: 'blue',
-	3: 'green',
-	4: 'orange',
-	5: 'pink'
-};
-
-var HEX_COLORS = {
-	1: '#D993ED',
-	2: '#60BAF9',
-	3: '#82E14F',
-	4: '#FDAC30',
-	5: '#F84780'
-};
-
+var HEX_COLORS = [];
 
 var checkedCells = {};
 
@@ -38,21 +23,42 @@ var contract;
 
 var selectedObject;
 
+var firstUpdateValue = true;
 
 
-function updateValues (timestamp, jsonValues) {
+function getRandomColor() {
+    return "#" + (Math.round(Math.random() * 0XFFFFFF)).toString(16);
+}
+
+
+function updateValues (timestamp, jsonValues) {	
 	$.each(jsonValues, function(machineID, columns) {
+		if (firstUpdateValue) {
+			var listNodes = document.createElement('ul'), li;
+			var node = document.createTextNode(columns.dns);
+			li = listNodes.appendChild(document.createElement('li'));
+			li.setAttribute('id', columns.dns);
+			li.appendChild(node);
+			$(li).click(function(event) {
+				//
+			});
+			$('#list-nodes').append(listNodes);
+
+			document.styleSheets[0].addRule('#circle-'+ machineID +'::before','background-color:'+ HEX_COLORS[machineID].color +';');
+			document.styleSheets[0].addRule('.machineRow'+ machineID + ' td.checked','background-color:'+ HEX_COLORS[machineID].color +';');
+
+			firstUpdateValue = false;
+		}
+				
 		$.each(columns, function(columnName, value) {
 			if (columnName == 'id') return true;
 			cellMapping[columnName][machineID].text(value);
 			if (columnName != 'dns') {
-				seriesMapping[columnName][machineID].addPoint([timestamp, value], true, false);
-			}
+				seriesMapping[columnName][machineID].addPoint([timestamp, value], true, false);		
+			} 
 		});
 	});
 }
-
-
 
 
 

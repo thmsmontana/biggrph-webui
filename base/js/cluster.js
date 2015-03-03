@@ -54,10 +54,19 @@ var generateDataTable = function () {
 	var i = 1;	// just to ensure we iterate through every color independently of the machine ID.
 	$.each(contract['machines'], function(machineID) {
 
+		if (!HEX_COLORS[machineID]) {	
+			HEX_COLORS[machineID] = { 
+				color : getRandomColor() 
+			};
+			//console.log('HEX_COLORS : ',HEX_COLORS);		
+		}
+
 		var machineRow = $('<tr></tr>');
-		machineRow.addClass(LABEL_COLORS[i]);
+		machineRow.addClass('machineRow' + machineID );
+
 		// color disk
-		var colorCell = $('<td><div id="circle-'+ LABEL_COLORS[i] +'" class="circle"></div></td>');
+		var colorCell = $('<td><div id="circle-'+ machineID +'" class="circle"></div></td>');
+		
 		machineRow.append(colorCell);
 
 		// value cells
@@ -80,14 +89,14 @@ var generateDataTable = function () {
 					toggleCell(machineID, columnName);
 				});
 
-				seriesMapping[columnName][machineID] = charts[columnName].addSeries({name:machineID, color: HEX_COLORS[i], data:[]});
-							charts[columnName].addSeries({
-				type: 'flags',
-				id: 'events',
-				data: [],
-				width: 16,
-            	height: 16
-			}, true, false);
+				seriesMapping[columnName][machineID] = charts[columnName].addSeries({name:machineID, color: HEX_COLORS[machineID].color, data:[]});
+				charts[columnName].addSeries({
+					type: 'flags',
+					id: 'events',
+					data: [],
+					width: 16,
+	            	height: 16
+				}, true, false);
 				seriesMapping[columnName][machineID].hide();
 			}
 
@@ -96,7 +105,7 @@ var generateDataTable = function () {
 			checkedCells[columnName][machineID] = false;
 			cellMapping[columnName][machineID] = valueCell;
 		});
-
+		
 		table.append(machineRow);
 
 		i++;
@@ -227,6 +236,8 @@ function highlightCell(columnName, machineID, hover) {
 		cellMapping[columnName][machineID].removeClass('cell-grey');
 	}
 }
+
+
 
 
 

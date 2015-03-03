@@ -1,9 +1,4 @@
 /* Déclaration */
-@purple-medium: #D993ED;
-@blue-medium:   #60BAF9;
-@green-medium:  #82E14F;
-@orange-medium: #FDAC30;
-@pink-medium:   #F84780;
 @white:         #FFFFFF;
 @grey-light:    #F9F9F9;
 @grey-medium:   #E4E4E4;
@@ -84,32 +79,12 @@
     float: left;
     border-radius: 50%;
 }
-#circle-purple:before { background-color: @purple-medium; }
-#circle-blue:before { background-color: @blue-medium; }
-#circle-green:before { background-color: @green-medium; }
-#circle-orange:before { background-color: @orange-medium; }
-#circle-pink:before { background-color: @pink-medium; }
 
 tr td.checked {
 	color: @white!important; 
 	font-weight: bold!important;
 }
 
-tr.purple td.checked {
-	background-color: @purple-medium!important;
-}
-tr.blue td.checked {
-  	background-color: @blue-medium!important;
-}
-tr.green td.checked {
-  	background-color: @green-medium!important;
-}
-tr.orange td.checked {
-  	background-color: @orange-medium!important;
-}
-tr.pink td.checked {
-  	background-color: @pink-medium!important;
-}
 
 td.cell-grey {
   	background-color: @grey-medium !important; 
@@ -174,6 +149,7 @@ div#content {
 
 #cluster h3 {
 	cursor: pointer;
+	margin-bottom: 0 !important;
 }
 
 
