@@ -121,7 +121,14 @@ var addMessage = function (message) {
 			title: " ",
 			text: message.message,
 			x: message.timestamp,
-            shape : 'url(../images/' + MESSAGE_TYPE[message.level] + '.png)'  
+            shape : 'url(../images/' + MESSAGE_TYPE[message.level] + '.png)',
+            events: {
+            	click: function () {
+            		(function (timestamp) {
+            			scrollToLogMessage(timestamp);
+            		})(message.timestamp);
+            	}
+            }
 		}, true, false);
 	});
 	if (message.level >= consoleLevelFilter) {
