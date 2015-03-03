@@ -23,6 +23,8 @@ var contract;
 
 var selectedObject;
 
+var synchronizeCharts = true;
+
 
 var firstUpdateValue = true;
 

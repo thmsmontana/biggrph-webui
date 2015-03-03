@@ -18,8 +18,6 @@ $('#toggle-console').click(function () {
 	toggleConsole();
 });
 
-
-
 /*
  *	CONSOLE FILTERS
  */

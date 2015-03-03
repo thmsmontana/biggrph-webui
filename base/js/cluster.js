@@ -262,8 +262,28 @@ function highlightCell(columnName, machineID, hover) {
 
 
 
+var onSetExtremes = function (min, max, originalColumn) {
+	if (synchronizeCharts) {
+		$.each(charts, function(column, chart) {
+			if (column === originalColumn) {
+			 	return true;
+			}
+			chart.xAxis[0].setExtremes(min, max);
+		});
+	}
+}
 
 
+$('#toggle-chartSync').click(function(event) {
+	synchronizeCharts = !synchronizeCharts;
+	if (!synchronizeCharts) {
+		$('#toggle-chartSync').find('i').removeClass('fa-check-square-o');
+		$('#toggle-chartSync').find('i').addClass('fa-square-o');
+	} else {
+		$('#toggle-chartSync').find('i').removeClass('fa-square-o');
+		$('#toggle-chartSync').find('i').addClass('fa-check-square-o');
+	}
+});
 
 
 
@@ -290,6 +310,15 @@ function generateChart(columnName) {
 				width: '200px'
 			},
 			valueDecimals: 4
+		},
+		xAxis: {
+			events: {
+				afterSetExtremes: function (event) {
+					if (event.trigger === 'navigator') {
+						onSetExtremes(event.min, event.max, columnName);
+					}
+				}
+			}
 		},
 		plotOptions: {
 			areaspline: {
