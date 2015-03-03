@@ -79,6 +79,7 @@ var objectPanel = $('#objectView');
 
 
 var selectObject = function (ID) {
+	console.log("ID", ID?true:false, ID);
 	selectedObject = null;
 	if (ID) {
 		$.each(bigObjects, function(index, object) {
@@ -107,9 +108,12 @@ var updateView = function () {
 			$('#objectName').append(' <span class="tag-type">dataset</span>');
 		}
 		$.each(selectedObject.allocation, function (index, node) {
-			$('#objectAllocation').append('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>')
-		})
-
+			var li = $('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>');
+			li.click(function() {
+				activateRow(node);
+			});
+			$('#objectAllocation').append(li);
+		});
 	} else {
 		objectPanel.hide();
 		$('#main').show();

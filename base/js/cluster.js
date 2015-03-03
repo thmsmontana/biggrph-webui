@@ -95,7 +95,7 @@ var generateDataTable = function () {
 					id: 'events',
 					data: [],
 					width: 16,
-	            	height: 16
+					height: 16
 				}, true, false);
 				seriesMapping[columnName][machineID].hide();
 			}
@@ -105,11 +105,11 @@ var generateDataTable = function () {
 			checkedCells[columnName][machineID] = false;
 			cellMapping[columnName][machineID] = valueCell;
 		});
-		
-		table.append(machineRow);
 
-		i++;
-	});
+table.append(machineRow);
+
+i++;
+});
 
 
 	//	Add table to clusterView
@@ -153,19 +153,33 @@ function toggleColumn (columnName) {
 	});
 }
 
-function toggleRow (machineID) {
-	var allChecked = true;
+function toggleRow (machineID, active) {
+	if (active) {
+		allChecked = false;
+	} else {
+		var allChecked = true;
 
-	$.each(checkedCells, function(columnName, checkedMachines) {
-		var checked = checkedMachines[machineID];
-		if (!checked) {
-			allChecked = false;
-			return false;
-		}
-	});
+		$.each(checkedCells, function(columnName, checkedMachines) {
+			var checked = checkedMachines[machineID];
+			if (!checked) {
+				allChecked = false;
+				return false;
+			}
+		});
+	}
 
 	$.each(checkedCells, function(columnName, checkedMachines) {
 		checkCell(columnName, machineID, !allChecked);
+	});
+}
+
+function activateRow (node) {
+	$.each(cellMapping.dns, function(i, val) {
+		if (val.html() === node) {
+			toggleRow(i, true);
+			selectObject(null);
+			return false;
+		}
 	});
 }
 
@@ -175,6 +189,7 @@ function toggleCell (machineID, columnName) {
 }
 
 function checkCell(columnName, machineID, checked) {
+	if (columnName === 'id') return;
 	if (checked) {
 		if (columnName != 'dns' && columnName != 'id') {
 			seriesMapping[columnName][machineID].show();
@@ -265,9 +280,9 @@ function generateChart(columnName) {
 		},
 		tooltip: {
 			style: {
-                    width: '200px'
-                },
-                valueDecimals: 4
+				width: '200px'
+			},
+			valueDecimals: 4
 		},
 		plotOptions: {
 			areaspline: {
