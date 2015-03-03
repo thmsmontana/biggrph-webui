@@ -12,7 +12,7 @@ var emptyObjectViewString = '<div class="container bigobject" id="content">\
 </div>\
 <div class="panel eight columns">\
 <h2>Sub-objects</h2>\
-<ul>\
+<ul id="subObjects">\
 </ul>\
 </div>\
 </div>\

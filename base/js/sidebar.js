@@ -1,9 +1,19 @@
 // Returns an HTML list from a JSON hierarchy tree
 function jsonToHtml(jsonTree, prefix) {
 	var object, list = document.createElement('ul'), li;
-
+	
 	for (object in jsonTree) {
 		(function (o) {
+			var keys = Object.keys(jsonTree);
+			// If the tree has more than one child (path), there are subobjects
+			if (keys.length > 1) {
+				// Make sure to remove the path from the children before sending the subobjects
+				var indexOfPath = keys.indexOf("path");
+				if (indexOfPath !== -1) {
+					keys.splice(indexOfPath, 1);
+				}
+			}
+
 			liContent = document.createElement('span');
 			if (o !== "path") {
 				var node = document.createTextNode(o);
@@ -56,7 +66,7 @@ function displayBigObjects() {
 		return hierarchy;
 	}, {});
 
-	//console.log(bigObjectsHierarchy);
+	console.log(bigObjectsHierarchy);
 	
 	$('#list-objects').append(jsonToHtml(bigObjectsHierarchy, ""));
 
