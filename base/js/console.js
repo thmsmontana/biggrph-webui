@@ -18,8 +18,6 @@ $('#toggle-console').click(function () {
 	toggleConsole();
 });
 
-
-
 /*
  *	CONSOLE FILTERS
  */
@@ -93,13 +91,12 @@ var regenerateConsoleMessages = function () {
 }
 
 var updateMessageCounts = function () {
-	$('#console-showall').text(logMessages.length + ' messages')
 	$('#console-level-error').text(logCounts[2] + ' errors')
 	$('#console-level-warning').text(logCounts[1] + ' warnings')
 	$('#console-level-info').text(logCounts[0] + ' infos')
 }
 
-function addMessageToView(message) {
+var addMessageToView = function (message) {
 	var jsDiv = document.getElementById('console-messages');
 	var scroll = $('#console-messages').scrollTop() + $('#console-messages').innerHeight() >= jsDiv.scrollHeight;
 	$(buildMessage(message)).appendTo('#console-messages');
@@ -109,3 +106,13 @@ function addMessageToView(message) {
 }
 
 
+var scrollToLogMessage = function (timestamp) {
+	setLogLevelFilter(0);
+	$.each(logMessages, function(index, message) {
+		if (message.timestamp === timestamp) {
+			showConsole();
+			$("#console-messages").scrollTop($("#console-messages")[0].scrollHeight * index);
+			return false;
+		}
+	});
+}

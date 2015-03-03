@@ -9,7 +9,7 @@
 
 	box-sizing: content-box;
 
-	background-color: rgba(255, 255, 255, 0.9);
+	background-color: rgb(255, 255, 255);
 
 	position: relative;
 }
@@ -46,6 +46,8 @@
 
 .console-header .buttons a {
 	margin: 0 10px;
+	color: #444;
+
 	text-shadow: 0 1px 1px rgba(255, 255, 255, .6);
 }
 
@@ -89,9 +91,16 @@
 
 .console-stats span {
 	display: inline-block;
+	padding: 4px 10px;
+	box-sizing: border-box;
 	font-size: .85em;
-	margin: 0 1.45em;
-	padding: .375em 0;
+	width: 25%;
+	float: left;
+	text-align: right;
+}
+
+.console-stats span#runtime {
+	text-align: left;
 }
 
 

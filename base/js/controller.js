@@ -23,6 +23,8 @@ var contract;
 
 var selectedObject;
 
+var synchronizeCharts = true;
+
 
 var firstUpdateValue = true;
 
@@ -52,7 +54,8 @@ function updateValues (timestamp, jsonValues) {
 			li.setAttribute('id', columns.dns);
 			li.appendChild(node);
 			$(li).click(function(event) {
-				//
+				selectObject(null);
+				activateRow(columns.dns);
 			});
 			$('#list-nodes').append(listNodes);
 
@@ -79,6 +82,7 @@ var objectPanel = $('#objectView');
 
 
 var selectObject = function (ID) {
+	console.log("ID", ID?true:false, ID);
 	selectedObject = null;
 	if (ID) {
 		$.each(bigObjects, function(index, object) {
@@ -98,8 +102,9 @@ var updateView = function () {
 
 	if (selectedObject) {
 		$('#main').hide();
+		fillObjectPanel();
 		objectPanel.show();
-
+		
 		objectPanel.append(emptyObjectViewString);
 		$('#objectName').append(selectedObject.id);
 		if (selectedObject.type === 'dataset') {
@@ -108,7 +113,6 @@ var updateView = function () {
 		$.each(selectedObject.allocation, function (index, node) {
 			$('#objectAllocation').append('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>')
 		})
-
 	} else {
 		objectPanel.hide();
 		$('#main').show();
@@ -128,7 +132,14 @@ var addMessage = function (message) {
 			title: " ",
 			text: message.message,
 			x: message.timestamp,
-            shape : 'url(../images/' + MESSAGE_TYPE[message.level] + '.png)'  
+            shape : 'url(../images/' + MESSAGE_TYPE[message.level] + '.png)',
+            events: {
+            	click: function () {
+            		(function (timestamp) {
+            			scrollToLogMessage(timestamp);
+            		})(message.timestamp);
+            	}
+            }
 		}, true, false);
 	});
 	if (message.level >= consoleLevelFilter) {

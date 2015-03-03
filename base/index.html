@@ -28,7 +28,7 @@
 <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/highcharts.js"></script>
 
 </head>
@@ -57,13 +57,18 @@
 		<div class="console-container">
 			<div class="console collapsed" id="console">
 				<div class="console-header">
+
+					<div class="buttons left-buttons">
+						<a id="toggle-chartSync" href="#"><i class="fa fa-check-square-o"></i> Sync charts</a>
+					</div>
+
+
 					<div class="buttons right-buttons">
 						<a id="toggle-console" href="#"><i class="fa fa-caret-square-o-up"></i></a>
 					</div>
 
 					<div class="console-stats">
-						<span id="runtime" href="#"></span>
-						<span><a id="console-showall" href="#">0 entries</a></span>
+						<span id="runtime" href="#">Runtime 00:00:00</span>
 						<span><a id="console-level-error" href="#">0 errors</a></span>
 						<span><a id="console-level-warning" href="#">0 warnings</a></span>
 						<span><a id="console-level-info" href="#">0 infos</a></span>

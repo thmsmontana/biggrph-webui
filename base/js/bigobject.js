@@ -15,3 +15,21 @@ var emptyObjectViewString = '<div class="container bigobject" id="content">\
 </div>\
 \
 </div>';
+
+
+
+var fillObjectPanel = function () {
+	objectPanel.append(emptyObjectViewString);
+	$('#objectName').append(selectedObject.id);
+	if (selectedObject.type === 'dataset') {
+		$('#objectName').append(' <span class="tag-type">dataset</span>');
+	}
+	$.each(selectedObject.allocation, function (index, node) {
+		var li = $('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>');
+		li.click(function() {
+			selectObject(null);
+			activateRow(node);
+		});
+		$('#objectAllocation').append(li);
+	});
+}

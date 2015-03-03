@@ -76,7 +76,7 @@ var generateDataTable = function () {
 
 			if (columnName == 'id' || columnName == 'dns') {
 				valueCell.click(function() {
-					toggleRow(machineID);
+					toggleRow(machineID, false);
 				});
 				valueCell.mouseover(function() {
 					highlightRow(machineID, true);
@@ -95,7 +95,7 @@ var generateDataTable = function () {
 					id: 'events',
 					data: [],
 					width: 16,
-	            	height: 16
+					height: 16
 				}, true, false);
 				seriesMapping[columnName][machineID].hide();
 			}
@@ -105,11 +105,11 @@ var generateDataTable = function () {
 			checkedCells[columnName][machineID] = false;
 			cellMapping[columnName][machineID] = valueCell;
 		});
-		
-		table.append(machineRow);
 
-		i++;
-	});
+table.append(machineRow);
+
+i++;
+});
 
 
 	//	Add table to clusterView
@@ -153,19 +153,40 @@ function toggleColumn (columnName) {
 	});
 }
 
-function toggleRow (machineID) {
-	var allChecked = true;
+function toggleRow (machineID, active) {
+	console.log('toggleRow ( ', machineID, ', ', active, ')');
+	var allChecked;
+	if (active) {
+		allChecked = false;
+	} else {
+		console.log('checking if need to activate or not');
+		allChecked = true;
+
+		$.each(checkedCells, function(columnName, checkedMachines) {
+			console.log('checking column', columnName, '>', checkedMachines);
+			if (columnName == 'id') return true;
+			var checked = checkedMachines[machineID];
+			if (!checked) {
+				console.log(machineID, 'is not checked in', checkedMachines);
+				allChecked = false;
+				return false;
+			}
+		});
+	}
 
 	$.each(checkedCells, function(columnName, checkedMachines) {
-		var checked = checkedMachines[machineID];
-		if (!checked) {
-			allChecked = false;
+		console.log('checking', machineID, 'at', columnName, !allChecked);
+		checkCell(columnName, machineID, !allChecked);
+	});
+}
+
+function activateRow (node) {
+	$.each(cellMapping.dns, function(i, val) {
+		if (val.html() === node) {
+			toggleRow(i, true);
+			selectObject(null);
 			return false;
 		}
-	});
-
-	$.each(checkedCells, function(columnName, checkedMachines) {
-		checkCell(columnName, machineID, !allChecked);
 	});
 }
 
@@ -175,6 +196,7 @@ function toggleCell (machineID, columnName) {
 }
 
 function checkCell(columnName, machineID, checked) {
+	if (columnName === 'id') return;
 	if (checked) {
 		if (columnName != 'dns' && columnName != 'id') {
 			seriesMapping[columnName][machineID].show();
@@ -240,8 +262,28 @@ function highlightCell(columnName, machineID, hover) {
 
 
 
+var onSetExtremes = function (min, max, originalColumn) {
+	if (synchronizeCharts) {
+		$.each(charts, function(column, chart) {
+			if (column === originalColumn) {
+			 	return true;
+			}
+			chart.xAxis[0].setExtremes(min, max);
+		});
+	}
+}
 
 
+$('#toggle-chartSync').click(function(event) {
+	synchronizeCharts = !synchronizeCharts;
+	if (!synchronizeCharts) {
+		$('#toggle-chartSync').find('i').removeClass('fa-check-square-o');
+		$('#toggle-chartSync').find('i').addClass('fa-square-o');
+	} else {
+		$('#toggle-chartSync').find('i').removeClass('fa-square-o');
+		$('#toggle-chartSync').find('i').addClass('fa-check-square-o');
+	}
+});
 
 
 
@@ -265,9 +307,18 @@ function generateChart(columnName) {
 		},
 		tooltip: {
 			style: {
-                    width: '200px'
-                },
-                valueDecimals: 4
+				width: '200px'
+			},
+			valueDecimals: 4
+		},
+		xAxis: {
+			events: {
+				afterSetExtremes: function (event) {
+					if (event.trigger === 'navigator') {
+						onSetExtremes(event.min, event.max, columnName);
+					}
+				}
+			}
 		},
 		plotOptions: {
 			areaspline: {
