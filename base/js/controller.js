@@ -56,6 +56,7 @@ function updateValues (timestamp, jsonValues) {
 			});
 			$('#list-nodes').append(listNodes);
 
+			document.styleSheets[0].addRule('#circle-'+ columns.dns +'::before','background-color:'+ HEX_COLORS[machineID].color +';');
 			document.styleSheets[0].addRule('#circle-'+ machineID +'::before','background-color:'+ HEX_COLORS[machineID].color +';');
 			document.styleSheets[0].addRule('.machineRow'+ machineID + ' td.checked','background-color:'+ HEX_COLORS[machineID].color +';');
 
@@ -101,11 +102,12 @@ var updateView = function () {
 
 		objectPanel.append(emptyObjectViewString);
 		$('#objectName').append(selectedObject.id);
+		console.log('id', selectedObject.id);
 		if (selectedObject.type === 'dataset') {
 			$('#objectName').append(' <span class="tag-type">dataset</span>');
 		}
 		$.each(selectedObject.allocation, function (index, node) {
-			$('#objectAllocation').append('<li><div id="circle-purple" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>')
+			$('#objectAllocation').append('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>')
 		})
 
 	} else {
@@ -152,7 +154,6 @@ var updateTime = function () {
 	if (!epoch) return;
 
     var runtime = new Date(Date.now() - epoch);
-	console.log(Date.now() - epoch, runtime);
     var h=runtime.getUTCHours();
     var m=runtime.getUTCMinutes();
     var s=runtime.getUTCSeconds();
