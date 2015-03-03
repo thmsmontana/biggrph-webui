@@ -1,5 +1,4 @@
 var	socket = io.connect();
-var bigObjects;
 
 
 socket.on('message', function (content) {

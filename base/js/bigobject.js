@@ -36,4 +36,11 @@ var populateObjectDetailPanel = function () {
 		});
 		$('#objectAllocation').append(li);
 	});
+    $.each(bigObjectChildren[selectedObject.id], function (index, childName) {
+        var li = $('<li>' + childName + '</li>');
+        li.click(function() {
+            setSelectedObject(selectedObject.id + '/' + childName);
+        });
+        $('#subObjects').append(li);
+    });
 }

@@ -11,8 +11,7 @@ function jsonToHtml(jsonTree, prefix) {
 			keys.splice(indexOfPath, 1);
 		}
 		if(jsonTree.path !== undefined) {
-			console.log("Object : ", jsonTree.path);
-			console.log("SubObjects : ", keys);
+            bigObjectChildren[jsonTree.path] = keys;
 		}
 	}
 
@@ -22,7 +21,7 @@ function jsonToHtml(jsonTree, prefix) {
 			if (o !== "path") {
 				var node = document.createTextNode(o);
 
-				liContent.setAttribute('id', 'span-'+o);
+				liContent.setAttribute('id', 'span-'+ prefix + o.toString());
 				liContent.setAttribute('class', 'spanObject');
 				liContent.appendChild(node);
 				li = list.appendChild(document.createElement('li'));
@@ -34,8 +33,7 @@ function jsonToHtml(jsonTree, prefix) {
 				});
 
 				$(liContent).click(function(event) {
-					$('.spanObject').removeClass('spanObjectSelected');
-					$(document.getElementById('span-'+o)).addClass('spanObjectSelected');			
+					setSelectedObject(prefix + o.toString());
 				});
 			}					
 			

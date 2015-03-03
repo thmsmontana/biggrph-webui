@@ -37,6 +37,9 @@ var selectedObject;
 
 var synchronizeCharts = true;
 
+var bigObjects;
+
+var bigObjectChildren = {};
 
 var firstUpdateValue = true;
 
@@ -166,11 +169,14 @@ var showDetailForNode = function (dns) {
  * @param ID
  */
 var setSelectedObject = function (ID) {
+
     selectedObject = null;
     if (ID) {
         $.each(bigObjects, function(index, object) {
             if (object.id === ID) {
                 selectedObject = object;
+                $('.spanObject').removeClass('spanObjectSelected');
+                $(document.getElementById('span-'+ID)).addClass('spanObjectSelected');
                 return false; // equiv. break;
             }
         });
