@@ -1,4 +1,7 @@
 
+var objectPanel = $('#objectView');
+
+
 var emptyObjectViewString = '<div class="container bigobject" id="content">\
 <h1 class="sixteen columns" id="objectName"></h1>\
 <div class="row">\
@@ -18,7 +21,8 @@ var emptyObjectViewString = '<div class="container bigobject" id="content">\
 
 
 
-var fillObjectPanel = function () {
+var populateObjectDetailPanel = function () {
+    objectPanel.empty();
 	objectPanel.append(emptyObjectViewString);
 	$('#objectName').append(selectedObject.id);
 	if (selectedObject.type === 'dataset') {
@@ -27,8 +31,8 @@ var fillObjectPanel = function () {
 	$.each(selectedObject.allocation, function (index, node) {
 		var li = $('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>');
 		li.click(function() {
-			selectObject(null);
-			activateRow(node);
+			setSelectedObject(null);
+			showDetailForNode(node);
 		});
 		$('#objectAllocation').append(li);
 	});

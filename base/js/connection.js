@@ -1,41 +1,40 @@
 var	socket = io.connect();
 var bigObjects;
 
-// on connection to server, ask for user's name with an anonymous callback
-socket.on('connect', function() {});
 
 socket.on('message', function (content) {
 	switch (content.msg) {
 		case 'nMachines':
-			var nMachinesArray = [];
+			var machinesArray = [];
 
 			for (var i = 0; i < content.data; i++){
-				nMachinesArray.push(i);
+				machinesArray.push(i);
 			}
 
 			contract = {
-				machines : nMachinesArray,
+				machines : machinesArray,
 				columns  : ['id', 'dns', 'absLoadAvg', 'relLoadAvg', 'ram', 'ramSpeed']
 			};
-			updateView();
-			generateDataTable();
+			refreshMainView();
+
+			initializeClusterInfo();
 
 			resetClock();
 			break;
 
 		case 'newdata':
 			if (contract) {
-				updateValues(content.data.timestamp, content.data.values);
+				onNewNodeStats(content.data.timestamp, content.data.values);
 			}
 			break;
 
 		case 'log':
-			addMessage(content.data);
+			onNewLogMessage(content.data);
 			break;
 
 		case 'bigobjects':
-			bigObjects = content.data;
-			displayBigObjects();
+            onUpdatedBigObjects(content.data);
+
 			break;
 
 		default:

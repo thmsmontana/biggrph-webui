@@ -1,10 +1,10 @@
 var clusterView = $('#clusterView');
 
 
-
-
-
-var generateDataTable = function () {
+/**
+ * Creates the stats table, refreshes the node list on the sidebar, sets up the charts.
+ */
+var initializeClusterInfo = function () {
 
 	var table = $('<table id="table"></table>');
 	
@@ -39,9 +39,9 @@ var generateDataTable = function () {
 			charts[column] = generateChart(column);
 		}
 
-		checkedCells[column] = {};
+		tableCellStates[column] = {};
 
-		cellMapping[column] = {};
+		tableCells[column] = {};
 
 		firstRow.append(headerCell);
 	});
@@ -56,7 +56,7 @@ var generateDataTable = function () {
 
 		if (!HEX_COLORS[machineID]) {	
 			HEX_COLORS[machineID] = { 
-				color : getRandomColor() 
+				color : randomColor()
 			};
 			//console.log('HEX_COLORS : ',HEX_COLORS);		
 		}
@@ -89,7 +89,7 @@ var generateDataTable = function () {
 					toggleCell(machineID, columnName);
 				});
 
-				seriesMapping[columnName][machineID] = charts[columnName].addSeries({name:machineID, color: HEX_COLORS[machineID].color, data:[]});
+				chartSeries[columnName][machineID] = charts[columnName].addSeries({name:machineID, color: HEX_COLORS[machineID].color, data:[]});
 				charts[columnName].addSeries({
 					type: 'flags',
 					id: 'events',
@@ -97,22 +97,34 @@ var generateDataTable = function () {
 					width: 16,
 					height: 16
 				}, true, false);
-				seriesMapping[columnName][machineID].hide();
+				chartSeries[columnName][machineID].hide();
 			}
 
 			machineRow.append(valueCell);
 
-			checkedCells[columnName][machineID] = false;
-			cellMapping[columnName][machineID] = valueCell;
+			tableCellStates[columnName][machineID] = false;
+			tableCells[columnName][machineID] = valueCell;
 		});
 
-table.append(machineRow);
+        table.append(machineRow);
 
-i++;
-});
+        i++;
+    });
 
 
-	//	Add table to clusterView
+    $('#toggle-chartSync').click(function(event) {
+        synchronizeCharts = !synchronizeCharts;
+        if (!synchronizeCharts) {
+            $('#toggle-chartSync').find('i').removeClass('fa-check-square-o');
+            $('#toggle-chartSync').find('i').addClass('fa-square-o');
+        } else {
+            $('#toggle-chartSync').find('i').removeClass('fa-square-o');
+            $('#toggle-chartSync').find('i').addClass('fa-check-square-o');
+        }
+    });
+
+
+    //	Add table to clusterView
 	clusterView.find('#data-table').empty();
 	clusterView.find('#data-table').append(table);
 };
@@ -121,7 +133,7 @@ i++;
 function toggleAllCells () {
 	var allChecked = true;
 
-	$.each(checkedCells, function(columnName, checkedMachines) {
+	$.each(tableCellStates, function(columnName, checkedMachines) {
 		$.each(checkedMachines, function(machineID, checked) {
 			if (!checked) {
 				allChecked = false;
@@ -131,7 +143,7 @@ function toggleAllCells () {
 		if (!allChecked) return false;
 	});
 
-	$.each(checkedCells, function(columnName, checkedMachines) {
+	$.each(tableCellStates, function(columnName, checkedMachines) {
 		$.each(checkedMachines, function(machineID, checked) {
 			checkCell(columnName, machineID, !allChecked);
 		});
@@ -141,57 +153,43 @@ function toggleAllCells () {
 function toggleColumn (columnName) {
 	var allChecked = true;
 
-	$.each(checkedCells[columnName], function(machineID, checked) {
+	$.each(tableCellStates[columnName], function(machineID, checked) {
 		if (!checked) {
 			allChecked = false;
 			return false;
 		}
 	});
 
-	$.each(checkedCells[columnName], function(machineID, checked) {
+	$.each(tableCellStates[columnName], function(machineID, checked) {
 		checkCell(columnName, machineID, !allChecked);
 	});
 }
 
 function toggleRow (machineID, active) {
-	console.log('toggleRow ( ', machineID, ', ', active, ')');
 	var allChecked;
 	if (active) {
 		allChecked = false;
 	} else {
-		console.log('checking if need to activate or not');
 		allChecked = true;
 
-		$.each(checkedCells, function(columnName, checkedMachines) {
-			console.log('checking column', columnName, '>', checkedMachines);
+		$.each(tableCellStates, function(columnName, checkedMachines) {
 			if (columnName == 'id') return true;
 			var checked = checkedMachines[machineID];
 			if (!checked) {
-				console.log(machineID, 'is not checked in', checkedMachines);
 				allChecked = false;
 				return false;
 			}
 		});
 	}
 
-	$.each(checkedCells, function(columnName, checkedMachines) {
-		console.log('checking', machineID, 'at', columnName, !allChecked);
+	$.each(tableCellStates, function(columnName, checkedMachines) {
 		checkCell(columnName, machineID, !allChecked);
 	});
 }
 
-function activateRow (node) {
-	$.each(cellMapping.dns, function(i, val) {
-		if (val.html() === node) {
-			toggleRow(i, true);
-			selectObject(null);
-			return false;
-		}
-	});
-}
 
 function toggleCell (machineID, columnName) {
-	var checked = checkedCells[columnName][machineID];
+	var checked = tableCellStates[columnName][machineID];
 	checkCell(columnName, machineID, !checked);
 }
 
@@ -199,29 +197,29 @@ function checkCell(columnName, machineID, checked) {
 	if (columnName === 'id') return;
 	if (checked) {
 		if (columnName != 'dns' && columnName != 'id') {
-			seriesMapping[columnName][machineID].show();
+			chartSeries[columnName][machineID].show();
 			if (columnIsFalse(columnName)) {
 				$('#chart-' + columnName).show();
 				charts[columnName].reflow();
 			}
 		}
-		checkedCells[columnName][machineID] = checked;
-		cellMapping[columnName][machineID].addClass('checked');
+		tableCellStates[columnName][machineID] = checked;
+		tableCells[columnName][machineID].addClass('checked');
 	} else {
-		checkedCells[columnName][machineID] = checked;
+		tableCellStates[columnName][machineID] = checked;
 		if (columnName != 'dns' && columnName != 'id') {
-			seriesMapping[columnName][machineID].hide();
+			chartSeries[columnName][machineID].hide();
 			if (columnIsFalse(columnName)) {
 				$('#chart-' + columnName).hide();
 			}
 		}
-		cellMapping[columnName][machineID].removeClass('checked');
+		tableCells[columnName][machineID].removeClass('checked');
 	}
 }
 
 function columnIsFalse(columnName) {
 	var isFalse = true;
-	$.each(checkedCells[columnName], function(machineID, checked) {
+	$.each(tableCellStates[columnName], function(machineID, checked) {
 		if (checked) {
 			isFalse = false;
 			return false;
@@ -232,7 +230,7 @@ function columnIsFalse(columnName) {
 
 
 function highlightAllCells (hover) {
-	$.each(cellMapping, function(columnName, machines) {
+	$.each(tableCells, function(columnName, machines) {
 		$.each(machines, function(machineID, td) {
 			highlightCell(columnName, machineID, hover);
 		});
@@ -240,22 +238,22 @@ function highlightAllCells (hover) {
 }
 
 function highlightColumn (columnName, hover) {
-	$.each(cellMapping[columnName], function(machineID, td) {
+	$.each(tableCells[columnName], function(machineID, td) {
 		highlightCell(columnName, machineID, hover);
 	});
 }
 
 function highlightRow (machineID, hover) {
-	$.each(cellMapping, function(columnName, machines) {
+	$.each(tableCells, function(columnName, machines) {
 		highlightCell(columnName, machineID, hover);
 	});
 }
 
 function highlightCell(columnName, machineID, hover) {
 	if (hover) {
-		cellMapping[columnName][machineID].addClass('cell-grey');
+		tableCells[columnName][machineID].addClass('cell-grey');
 	} else {
-		cellMapping[columnName][machineID].removeClass('cell-grey');
+		tableCells[columnName][machineID].removeClass('cell-grey');
 	}
 }
 
@@ -274,21 +272,9 @@ var onSetExtremes = function (min, max, originalColumn) {
 }
 
 
-$('#toggle-chartSync').click(function(event) {
-	synchronizeCharts = !synchronizeCharts;
-	if (!synchronizeCharts) {
-		$('#toggle-chartSync').find('i').removeClass('fa-check-square-o');
-		$('#toggle-chartSync').find('i').addClass('fa-square-o');
-	} else {
-		$('#toggle-chartSync').find('i').removeClass('fa-square-o');
-		$('#toggle-chartSync').find('i').addClass('fa-check-square-o');
-	}
-});
-
-
 
 function generateChart(columnName) {
-	seriesMapping[columnName] = {};
+	chartSeries[columnName] = {};
 	var id = 'chart-' + columnName;
 	var div = $('<div id="' + id + '"></div>');
 	div.hide();

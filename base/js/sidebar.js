@@ -16,7 +16,7 @@ function jsonToHtml(jsonTree, prefix) {
 				li.appendChild(liContent);
 				$(li).click(function(event) {
 					event.stopPropagation();
-					selectObject(prefix + o.toString());
+					setSelectedObject(prefix + o.toString());
 				});
 
 				$(liContent).click(function(event) {

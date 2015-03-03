@@ -9,15 +9,27 @@ var JSON_TO_PRETTY_NAMES = {
 
 var HEX_COLORS = [];
 
-var checkedCells = {};
+/**
+ * To access the state of a table cell, tableCellStates[columnID][machineID]
+ * where machineID is the numericalID of the machine.
+ * @type {{}}
+ */
+var tableCellStates = {};
 
+/**
+ * To access a chart, chart[columnName] where columnName is the column
+ * represented on the graph.
+ */
 var charts = {};
 
-var seriesMapping = {};
+/**
+ * To access a chartSeries, chartSeries[columnName][machineID] where
+ * columnName is the column represented on the series' graph and
+ * the machineID is the numerical ID of the machine.
+ */
+var chartSeries = {};
 
-var cellMapping = {};
-
-var chart;
+var tableCells = {};
 
 var contract;
 
@@ -37,15 +49,14 @@ var logCounts = {
 
 
 
-var objectPanel = $('#objectView');
 var consoleMessages = $('#console-messages');
 
-function getRandomColor() {
+function randomColor() {
     return "#" + (Math.round(Math.random() * 0XFFFFFF)).toString(16);
 }
 
 
-function updateValues (timestamp, jsonValues) {	
+function onNewNodeStats (timestamp, jsonValues) {
 	$.each(jsonValues, function(machineID, columns) {
 		if (firstUpdateValue) {
 			var listNodes = document.createElement('ul'), li;
@@ -54,8 +65,8 @@ function updateValues (timestamp, jsonValues) {
 			li.setAttribute('id', columns.dns);
 			li.appendChild(node);
 			$(li).click(function(event) {
-				selectObject(null);
-				activateRow(columns.dns);
+				setSelectedObject(null);
+				showDetailForNode(columns.dns);
 			});
 			$('#list-nodes').append(listNodes);
 
@@ -68,9 +79,9 @@ function updateValues (timestamp, jsonValues) {
 				
 		$.each(columns, function(columnName, value) {
 			if (columnName == 'id') return true;
-			cellMapping[columnName][machineID].text(value);
+			tableCells[columnName][machineID].text(value);
 			if (columnName != 'dns') {
-				seriesMapping[columnName][machineID].addPoint([timestamp, value], true, false);		
+				chartSeries[columnName][machineID].addPoint([timestamp, value], true, false);
 			} 
 		});
 	});
@@ -78,41 +89,11 @@ function updateValues (timestamp, jsonValues) {
 
 
 
-var objectPanel = $('#objectView');
-
-
-var selectObject = function (ID) {
-	console.log("ID", ID?true:false, ID);
-	selectedObject = null;
-	if (ID) {
-		$.each(bigObjects, function(index, object) {
-			if (object.id === ID) {
-				selectedObject = object;
-				return false; // equiv. break;
-			}
-		});
-	}
-	updateView();
-	return selectedObject;
-}
-
-
-var updateView = function () {
-	objectPanel.empty();
-
+var refreshMainView = function () {
 	if (selectedObject) {
 		$('#main').hide();
-		fillObjectPanel();
+		populateObjectDetailPanel();
 		objectPanel.show();
-
-		objectPanel.append(emptyObjectViewString);
-		$('#objectName').append(selectedObject.id);
-		if (selectedObject.type === 'dataset') {
-			$('#objectName').append(' <span class="tag-type">dataset</span>');
-		}
-		$.each(selectedObject.allocation, function (index, node) {
-			$('#objectAllocation').append('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>')
-		})
 	} else {
 		$('.spanObject').removeClass('spanObjectSelected');
 		objectPanel.hide();
@@ -121,12 +102,13 @@ var updateView = function () {
 }
 
 
-var MESSAGE_TYPE = {
-	0: 'info',
-	1: 'warning',
-	2: 'error'
-};
-var addMessage = function (message) {
+var onNewLogMessage = function (message) {
+    var MESSAGE_TYPE = {
+        0: 'info',
+        1: 'warning',
+        2: 'error'
+    };
+
 	logMessages.push(message);
 	$.each(charts, function(key, chart){
 		chart.get('events').addPoint({
@@ -137,7 +119,7 @@ var addMessage = function (message) {
             events: {
             	click: function () {
             		(function (timestamp) {
-            			scrollToLogMessage(timestamp);
+            			scrollConsoleToTimestamp(timestamp);
             		})(message.timestamp);
             	}
             }
@@ -145,37 +127,55 @@ var addMessage = function (message) {
 	});
 	if (message.level >= consoleLevelFilter) {
 		logCounts[message.level]++;
-		updateMessageCounts();
-		addMessageToView(message);
+		refreshConsoleStatsView();
+		appendLogMessageToView(message);
 	}
 }
 
 
-
-
-var epoch, t;
-
-var resetClock = function () {
-	epoch = Date.now();
-	clearTimeout(t);
-	updateTime();
+var onUpdatedBigObjects = function (data) {
+    bigObjects = data;
+    displayBigObjects();
 }
 
-var updateTime = function () {
-	if (!epoch) return;
 
-    var runtime = new Date(Date.now() - epoch);
-    var h=runtime.getUTCHours();
-    var m=runtime.getUTCMinutes();
-    var s=runtime.getUTCSeconds();
-    h = checkTime(h);
-    m = checkTime(m);
-    s = checkTime(s);
-    document.getElementById('runtime').innerHTML = 'Runtime ' + h+':'+m+':'+s;
-    t = setTimeout(updateTime,500);
+
+
+
+
+
+
+/**
+ * Checks the whole row for the machine whose dns matches
+ * and switches the view to cluster view
+ * @param dns
+ */
+var showDetailForNode = function (dns) {
+    $.each(tableCells.dns, function(i, val) {
+        if (val.html() === dns) {
+            toggleRow(i, true);
+            setSelectedObject(null);
+            return false;
+        }
+    });
 }
 
-function checkTime(i) {
-    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
+/**
+ * When ID is null, shows the cluster view. If ID corresponds to
+ * the ID of a distributed big object, switch to its detail view.
+ * @param ID
+ */
+var setSelectedObject = function (ID) {
+    selectedObject = null;
+    if (ID) {
+        $.each(bigObjects, function(index, object) {
+            if (object.id === ID) {
+                selectedObject = object;
+                return false; // equiv. break;
+            }
+        });
+    }
+    refreshMainView();
+    return selectedObject;
 }
+
