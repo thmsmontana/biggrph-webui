@@ -4,23 +4,35 @@ function jsonToHtml(jsonTree, prefix) {
 
 	for (object in jsonTree) {
 		(function (o) {
-			var node = document.createTextNode(o);
-			li = list.appendChild(document.createElement('li'));
-			li.appendChild(node);
-			$(li).click(function(event) {
-				event.stopPropagation();
-				selectObject(prefix + o.toString());
-			});
+			liContent = document.createElement('span');
+			if (o !== "path") {
+				var node = document.createTextNode(o);
+
+				liContent.setAttribute('id', 'span-'+o);
+				liContent.setAttribute('class', 'spanObject');
+				liContent.appendChild(node);
+				li = list.appendChild(document.createElement('li'));
+				
+				li.appendChild(liContent);
+				$(li).click(function(event) {
+					event.stopPropagation();
+					selectObject(prefix + o.toString());
+				});
+
+				$(liContent).click(function(event) {
+					$('.spanObject').removeClass('spanObjectSelected');
+					$(document.getElementById('span-'+o)).addClass('spanObjectSelected');			
+				});
+			}					
+			
 			if (typeof jsonTree[o] === "object") {
 				li.appendChild(jsonToHtml(jsonTree[o], prefix + o.toString() + '/'));
-			} else {
-				li.firstChild.nodeValue += jsonTree[o];
-			}  
+			}
 		})(object);
-
 	}
 	return list;
 } 
+
 
 function displayBigObjects() {
 	var bigObjectsArray = [];
@@ -29,18 +41,6 @@ function displayBigObjects() {
 
 	$.each(bigObjects, function(key, object) {
 		bigObjectsArray.push(object.id);
-
-		/*
-		if (key == 'type') {
-			switch (value) {
-				case 'dataset':
-					break;
-				case 'other':
-					break;
-				default:
-					break;
-			}
-		}*/
 	});
 
 	// Create JSON hierarchy tree of distributed objects
@@ -51,6 +51,7 @@ function displayBigObjects() {
 				x[item] = {};
 			}
 			x = x[item];
+			x.path = path;
 		});
 		return hierarchy;
 	}, {});
@@ -58,5 +59,6 @@ function displayBigObjects() {
 	//console.log(bigObjectsHierarchy);
 	
 	$('#list-objects').append(jsonToHtml(bigObjectsHierarchy, ""));
+
 }
 

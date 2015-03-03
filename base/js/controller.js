@@ -102,7 +102,6 @@ var updateView = function () {
 
 		objectPanel.append(emptyObjectViewString);
 		$('#objectName').append(selectedObject.id);
-		console.log('id', selectedObject.id);
 		if (selectedObject.type === 'dataset') {
 			$('#objectName').append(' <span class="tag-type">dataset</span>');
 		}
