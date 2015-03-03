@@ -104,7 +104,7 @@ var generateDataTable = function () {
 
 
 	//	Add table to clusterView
-	
+	clusterView.find('#data-table').empty();
 	clusterView.find('#data-table').append(table);
 };
 

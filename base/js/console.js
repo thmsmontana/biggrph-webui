@@ -6,15 +6,16 @@ var MESSAGE_TYPE = {
 
 
 
+
+var consoleLevelFilter = 0;
+var displayConsole = false;
+
+
 /*
  *	TOGGLE CONSOLE
  */
-$('#toggle-console').click(function() {
-	if ($('#console').hasClass('collapsed')) {
-		showConsole();
-	} else {
-		hideConsole();
-	}
+$('#toggle-console').click(function () {
+	toggleConsole();
 });
 
 
@@ -24,36 +25,21 @@ $('#toggle-console').click(function() {
  */
 
 $('#console-showall').click(function() {
-	var c = $('#console-messages');
-	c.removeClass('log-warning');
-	c.removeClass('log-error');
-	showConsole();
+	setLogLevelFilter(0);
 });
 
 $('#console-level-info').click(function() {
-	var c = $('#console-messages');
-	c.removeClass('log-warning');
-	c.removeClass('log-error');
-	showConsole();
+	setLogLevelFilter(0);
+
 });
 
 $('#console-level-warning').click(function() {
-	var c = $('#console-messages');
-	console.log(c);
-	if (!c.hasClass('log-warning')) {
-		c.addClass('log-warning');
-	}
-	c.removeClass('log-error');
-	showConsole();
+	setLogLevelFilter(1);
+
 });
 
 $('#console-level-error').click(function() {
-	var c = $('#console-messages');
-	c.removeClass('log-warning');
-	if (!c.hasClass('log-error')) {
-		c.addClass('log-error');
-	}
-	showConsole();
+	setLogLevelFilter(2);
 });
 
 
@@ -64,37 +50,62 @@ $('#console-level-error').click(function() {
  * STYLE BUISNESS
  */
 
+
+var toggleConsole = function () {
+	displayConsole ? hideConsole() : showConsole();
+}
+
 function showConsole() {
+	displayConsole = true;
 	$('#console').removeClass('collapsed')
+	$('#toggle-console i').removeClass('fa-caret-square-o-up');
+	$('#toggle-console i').addClass('fa-caret-square-o-down');
 }
 
 function hideConsole() {
+	displayConsole = false;
 	$('#console').addClass('collapsed');
+	$('#toggle-console i').removeClass('fa-caret-square-o-down');
+	$('#toggle-console i').addClass('fa-caret-square-o-up');
 }
 
-function buildMessage(timestamp, messageType, messageString) {
-	var typeString = MESSAGE_TYPE[messageType];
-	var date = new Date(timestamp);
-	var message = '<div class="console-message message-'+ typeString+  '">				<div class="console-message-meta">					<a class="timestamp" href="#">' + date.toLocaleString() + '</a>					<span class="tag tag-' + typeString + '">' + typeString + '</span>				</div>				<p class="console-message-string">' + messageString + '</p>			</div>'
-	return message;
+function buildMessage(message) {
+	var typeString = MESSAGE_TYPE[message.level];
+	var date = new Date(message.timestamp);
+	var messageHtmlItem = '<div class="console-message message-'+ typeString + '">				<div class="console-message-meta">					<a class="timestamp" href="#">' + date.toLocaleString() + '</a>					<span class="tag tag-' + typeString + '">' + typeString + '</span>				</div>				<p class="console-message-string">' + message.message + '</p>			</div>'
+	return messageHtmlItem;
 }
 
-function addMessage(timestamp, messageType, messageString) {
+
+var setLogLevelFilter = function (level) {
+	consoleLevelFilter = level;
+	regenerateConsoleMessages();
+	showConsole();
+}
+
+var regenerateConsoleMessages = function () {
+	consoleMessages.empty();
+	$.each(logMessages, function(index, message) {
+		if (message.level >= consoleLevelFilter) {
+			addMessageToView(message);
+		}
+	});
+}
+
+var updateMessageCounts = function () {
+	$('#console-showall').text(logMessages.length + ' messages')
+	$('#console-level-error').text(logCounts[2] + ' errors')
+	$('#console-level-warning').text(logCounts[1] + ' warnings')
+	$('#console-level-info').text(logCounts[0] + ' infos')
+}
+
+function addMessageToView(message) {
 	var jsDiv = document.getElementById('console-messages');
 	var scroll = $('#console-messages').scrollTop() + $('#console-messages').innerHeight() >= jsDiv.scrollHeight;
-	$(buildMessage(timestamp, messageType, messageString)).appendTo('#console-messages');
+	$(buildMessage(message)).appendTo('#console-messages');
 	if (scroll) {
 		$("#console-messages").animate({scrollTop:$("#console-messages")[0].scrollHeight}, 300);
 	}
-
-	$.each(charts, function(key, chart){
-		chart.get('events').addPoint({
-			title: " ",
-			text: messageString,
-			x: timestamp,
-            shape : 'url(../images/' + MESSAGE_TYPE[messageType] + '.png)'  
-		}, true, false);
-	});
 }
 
 

@@ -38,6 +38,17 @@ var contract;
 
 var selectedObject;
 
+var logMessages = [];
+var logCounts = {
+	0: 0,
+	1: 0,
+	2: 0
+}
+
+
+
+var objectPanel = $('#objectView');
+var consoleMessages = $('#console-messages');
 
 
 function updateValues (timestamp, jsonValues) {
@@ -56,7 +67,6 @@ function updateValues (timestamp, jsonValues) {
 
 
 
-var objectPanel = $('#objectView');
 
 
 
@@ -98,3 +108,56 @@ var updateView = function () {
 	}
 }
 
+
+var MESSAGE_TYPE = {
+	0: 'info',
+	1: 'warning',
+	2: 'error'
+};
+var addMessage = function (message) {
+	logMessages.push(message);
+	$.each(charts, function(key, chart){
+		chart.get('events').addPoint({
+			title: " ",
+			text: message.message,
+			x: message.timestamp,
+            shape : 'url(../images/' + MESSAGE_TYPE[message.level] + '.png)'  
+		}, true, false);
+	});
+	if (message.level >= consoleLevelFilter) {
+		logCounts[message.level]++;
+		updateMessageCounts();
+		addMessageToView(message);
+	}
+}
+
+
+
+
+var epoch, t;
+
+var resetClock = function () {
+	epoch = Date.now();
+	clearTimeout(t);
+	updateTime();
+}
+
+var updateTime = function () {
+	if (!epoch) return;
+
+    var runtime = new Date(Date.now() - epoch);
+	console.log(Date.now() - epoch, runtime);
+    var h=runtime.getUTCHours();
+    var m=runtime.getUTCMinutes();
+    var s=runtime.getUTCSeconds();
+    h = checkTime(h);
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById('runtime').innerHTML = 'Runtime ' + h+':'+m+':'+s;
+    t = setTimeout(updateTime,500);
+}
+
+function checkTime(i) {
+    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
+    return i;
+}
