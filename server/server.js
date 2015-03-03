@@ -14,6 +14,8 @@ app.get('/', function (req, res) {
 });
 
 io.sockets.on('connection', function (socket) {
+	socket.broadcast.emit('hello');
+	
 	socket.on('message', function (content) {
 		socket.broadcast.emit('message', content);
 	});

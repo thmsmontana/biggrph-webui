@@ -19,6 +19,8 @@ socket.on('message', function (content) {
 			};
 			updateView();
 			generateDataTable();
+
+			resetClock();
 			break;
 
 		case 'newdata':
@@ -28,7 +30,7 @@ socket.on('message', function (content) {
 			break;
 
 		case 'log':
-			addMessage(content.data.timestamp, content.data.level, content.data.message);
+			addMessage(content.data);
 			break;
 
 		case 'bigobjects':
