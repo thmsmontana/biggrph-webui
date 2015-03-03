@@ -76,7 +76,7 @@ var generateDataTable = function () {
 
 			if (columnName == 'id' || columnName == 'dns') {
 				valueCell.click(function() {
-					toggleRow(machineID);
+					toggleRow(machineID, false);
 				});
 				valueCell.mouseover(function() {
 					highlightRow(machineID, true);
@@ -154,14 +154,20 @@ function toggleColumn (columnName) {
 }
 
 function toggleRow (machineID, active) {
+	console.log('toggleRow ( ', machineID, ', ', active, ')');
+	var allChecked;
 	if (active) {
 		allChecked = false;
 	} else {
-		var allChecked = true;
+		console.log('checking if need to activate or not');
+		allChecked = true;
 
 		$.each(checkedCells, function(columnName, checkedMachines) {
+			console.log('checking column', columnName, '>', checkedMachines);
+			if (columnName == 'id') return true;
 			var checked = checkedMachines[machineID];
 			if (!checked) {
+				console.log(machineID, 'is not checked in', checkedMachines);
 				allChecked = false;
 				return false;
 			}
@@ -169,6 +175,7 @@ function toggleRow (machineID, active) {
 	}
 
 	$.each(checkedCells, function(columnName, checkedMachines) {
+		console.log('checking', machineID, 'at', columnName, !allChecked);
 		checkCell(columnName, machineID, !allChecked);
 	});
 }

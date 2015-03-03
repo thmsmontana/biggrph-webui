@@ -52,7 +52,8 @@ function updateValues (timestamp, jsonValues) {
 			li.setAttribute('id', columns.dns);
 			li.appendChild(node);
 			$(li).click(function(event) {
-				//
+				selectObject(null);
+				activateRow(columns.dns);
 			});
 			$('#list-nodes').append(listNodes);
 
@@ -99,21 +100,8 @@ var updateView = function () {
 
 	if (selectedObject) {
 		$('#main').hide();
+		fillObjectPanel();
 		objectPanel.show();
-
-		objectPanel.append(emptyObjectViewString);
-		$('#objectName').append(selectedObject.id);
-		console.log('id', selectedObject.id);
-		if (selectedObject.type === 'dataset') {
-			$('#objectName').append(' <span class="tag-type">dataset</span>');
-		}
-		$.each(selectedObject.allocation, function (index, node) {
-			var li = $('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>');
-			li.click(function() {
-				activateRow(node);
-			});
-			$('#objectAllocation').append(li);
-		});
 	} else {
 		objectPanel.hide();
 		$('#main').show();
