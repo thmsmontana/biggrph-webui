@@ -1,19 +1,23 @@
 // Returns an HTML list from a JSON hierarchy tree
 function jsonToHtml(jsonTree, prefix) {
 	var object, list = document.createElement('ul'), li;
-	
+
+	var keys = Object.keys(jsonTree);
+	// If the tree has more than one child (path), there are subobjects
+	if (keys.length > 1) {
+		// Make sure to remove the path from the children before sending the subobjects
+		var indexOfPath = keys.indexOf("path");
+		if (indexOfPath !== -1) {
+			keys.splice(indexOfPath, 1);
+		}
+		if(jsonTree.path !== undefined) {
+			console.log("Object : ", jsonTree.path);
+			console.log("SubObjects : ", keys);
+		}
+	}
+
 	for (object in jsonTree) {
 		(function (o) {
-			var keys = Object.keys(jsonTree);
-			// If the tree has more than one child (path), there are subobjects
-			if (keys.length > 1) {
-				// Make sure to remove the path from the children before sending the subobjects
-				var indexOfPath = keys.indexOf("path");
-				if (indexOfPath !== -1) {
-					keys.splice(indexOfPath, 1);
-				}
-			}
-
 			liContent = document.createElement('span');
 			if (o !== "path") {
 				var node = document.createTextNode(o);
@@ -49,6 +53,7 @@ function displayBigObjects() {
 
 	$('#list-objects').empty();
 
+    console.log(bigObjects);
 	$.each(bigObjects, function(key, object) {
 		bigObjectsArray.push(object.id);
 	});
@@ -60,14 +65,12 @@ function displayBigObjects() {
 			if (!x[item]) {
 				x[item] = {};
 			}
-			x = x[item];
-			x.path = path;
+			x = x[item];		
 		});
+		x.path = path;
 		return hierarchy;
 	}, {});
 
-	console.log(bigObjectsHierarchy);
-	
 	$('#list-objects').append(jsonToHtml(bigObjectsHierarchy, ""));
 
 }
