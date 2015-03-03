@@ -104,7 +104,7 @@ var updateView = function () {
 		$('#main').hide();
 		fillObjectPanel();
 		objectPanel.show();
-		
+
 		objectPanel.append(emptyObjectViewString);
 		$('#objectName').append(selectedObject.id);
 		if (selectedObject.type === 'dataset') {
@@ -114,6 +114,7 @@ var updateView = function () {
 			$('#objectAllocation').append('<li><div id="circle-'+node+'" class="circle"></div> ' + node + '<i class="fa fa-eye"></i></li>')
 		})
 	} else {
+		$('.spanObject').removeClass('spanObjectSelected');
 		objectPanel.hide();
 		$('#main').show();
 	}
