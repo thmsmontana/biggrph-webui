@@ -33,7 +33,6 @@ socket.on('message', function (content) {
 
 		case 'bigobjects':
             onUpdatedBigObjects(content.data);
-
 			break;
 
 		default:
