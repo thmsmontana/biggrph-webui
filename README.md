@@ -8,7 +8,10 @@ Usage
 -----
 
 ### Requirements
-To run the server, you need to have [NodeJS](http://nodejs.org) installed and configured on your machine.
+To run the server, you need to have [Node.js](http://nodejs.org) installed and configured on your machine.
+
+To install Node.js, download it from its [website](http://nodejs.org) or run `find-node-or-install.sh` in a Terminal.
+
 Once Node is installed, open a terminal at the root of the project and run `npm install`. This will install all the dependencies needed to execute the program.
 
 ### Running the app
