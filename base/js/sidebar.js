@@ -51,7 +51,6 @@ function displayBigObjects() {
 
 	$('#list-objects').empty();
 
-    console.log(bigObjects);
 	$.each(bigObjects, function(key, object) {
 		bigObjectsArray.push(object.id);
 	});
@@ -70,6 +69,5 @@ function displayBigObjects() {
 	}, {});
 
 	$('#list-objects').append(jsonToHtml(bigObjectsHierarchy, ""));
-
 }
 
