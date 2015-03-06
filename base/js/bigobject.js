@@ -37,12 +37,10 @@ var populateObjectDetailPanel = function () {
 		var li = $('<li>Not available</li>');
         $('#objectInformation').append(li);
 	} else {
-		if(selectedObject.type === "BigAdjacencyTable") {
-			$.each(selectedObject.infos, function (property, value) {
-				var li = $('<li>' + value + " " + property + '</li>');
-		        $('#objectInformation').append(li);
-			});
-		}
+		$.each(selectedObject.infos, function (property, value) {
+			var li = $('<li>' + value + " " + property + '</li>');
+	        $('#objectInformation').append(li);
+		});	
 	}
 
 	$.each(selectedObject.allocation, function (index, node) {
@@ -54,7 +52,7 @@ var populateObjectDetailPanel = function () {
 		$('#objectAllocation').append(li);
 	});
 
-	if (bigObjectChildren[selectedObject.id] === undefined) {
+	if (bigObjectChildren[selectedObject.id] !== undefined) {
 		$.each(bigObjectChildren[selectedObject.id], function (index, childName) {
 	        var li = $('<li>' + childName + '</li>');
 	        li.click(function() {
