@@ -33,12 +33,12 @@ var populateObjectDetailPanel = function () {
 	$('#objectName').append(selectedObject.id);
 	$('#objectName').append(' <span class="tag-type">'+selectedObject.type+'</span>');
 
-	if (selectedObject.infos === undefined) {
+	if (selectedObject.infos.length === 0) {
 		var li = $('<li>Not available</li>');
         $('#objectInformation').append(li);
 	} else {
-		$.each(selectedObject.infos, function (property, value) {
-			var li = $('<li>' + value + " " + property + '</li>');
+		$.each(selectedObject.infos, function (index, value) {
+			var li = $('<li>' + value + '</li>');
 	        $('#objectInformation').append(li);
 		});	
 	}
